@@ -35,33 +35,61 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/tabs/:id', async(req, res) => {
+        app.get('/tabs/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const result = await productsCollection.findOne(query);
             res.send(result)
-          })
+        })
 
-          
-          app.post('/addatoy', async(req, res) => {
-              const newToy = req.body;
-              console.log(newToy)
-              const result = await toyCollection.insertOne(newToy)
-              res.send(result)
-            })
-            
-            app.get('/addatoy', async(req, res) => {
-                const cursor = toyCollection.find();
-                const result = await cursor.toArray();
-                res.send(result)
-            })
 
-            app.delete('/addatoy/:id', async(req, res) => {
-                const id = req.params.id;
-                const query = {_id: new ObjectId(id)}
-                const result = await toyCollection.deleteOne(query);
-                res.send(result)
-            })
+        app.post('/addatoy', async (req, res) => {
+            const newToy = req.body;
+            console.log(newToy)
+            const result = await toyCollection.insertOne(newToy)
+            res.send(result)
+        })
+
+        app.get('/addatoy', async (req, res) => {
+            const cursor = toyCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
+        app.get('/addatoy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await toyCollection.findOne(query);
+            res.send(result)
+        })
+
+        app.put('/addatoy/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const updatedToy = req.body;
+            const toys = {
+                $set: {
+                    name: updatedToy.name,
+                    seller: updatedToy.seller,
+                    photoURL: updatedToy.photoURL,
+                    quantity: updatedToy.quantity,
+                    price: updatedToy.price,
+                    email: updatedToy.email,
+                    category: updatedToy.category,
+                    rating: updatedToy.rating
+                }
+            }
+            const result = await toyCollection.updateOne(filter, toys, options);
+            res.send(result)
+        })
+
+        app.delete('/addatoy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await toyCollection.deleteOne(query);
+            res.send(result)
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
