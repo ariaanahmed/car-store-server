@@ -26,6 +26,7 @@ async function run() {
         await client.connect();
 
         const productsCollection = client.db("toyMarket").collection('products');
+        const toyCollection = client.db("toyMarket").collection('toys');
 
         // Find a Document
         app.get('/tabs', async (req, res) => {
@@ -40,6 +41,13 @@ async function run() {
             const result = await productsCollection.findOne(query);
             res.send(result)
           })
+
+        app.post('/addatoy', async(req, res) => {
+            const newToy = req.body;
+            console.log(newToy)
+            const result = await toyCollection.insertOne(newToy)
+            res.send(result)
+        })
 
 
         // Send a ping to confirm a successful connection
