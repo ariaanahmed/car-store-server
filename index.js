@@ -11,6 +11,8 @@ app.use(express.json())
 
 const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.USER_PASS}@cluster0.jvx2mqj.mongodb.net/?retryWrites=true&w=majority`;
 
+console.log(uri)
+
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {
@@ -41,7 +43,6 @@ async function run() {
             const result = await productsCollection.findOne(query);
             res.send(result)
         })
-
 
         app.post('/addatoy', async (req, res) => {
             const newToy = req.body;
